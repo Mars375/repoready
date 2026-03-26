@@ -1,65 +1,101 @@
-import Image from "next/image";
+import { UrlInput } from '@/components/url-input'
+import { NavAuth } from '@/components/nav-auth'
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen bg-[#0c0a09] text-stone-100 flex flex-col">
+      {/* Navbar */}
+      <nav className="flex items-center justify-between px-6 py-4 border-b border-stone-900/60">
+        <span className="font-mono text-sm font-semibold tracking-tight text-stone-300">
+          repo<span className="text-amber-500">ready</span>
+        </span>
+        <NavAuth />
+      </nav>
+
+      {/* Hero */}
+      <section className="flex flex-1 items-center px-6 max-w-6xl mx-auto w-full gap-12 py-16 lg:py-20">
+        {/* Left */}
+        <div className="flex-1 flex flex-col gap-8 min-w-0">
+          <div>
+            <p className="font-mono text-xs text-stone-500 uppercase tracking-widest mb-5">
+              01 / Repository Analysis
+            </p>
+            <h1 className="text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+              Your repo,{' '}
+              <span className="text-amber-500">documented.</span>
+            </h1>
+            <p className="mt-4 text-stone-400 text-lg leading-relaxed max-w-md">
+              Paste a GitHub URL. Get a complete README, .env.example,
+              docker&#8209;compose, and CI config — generated from your actual code.
+            </p>
+          </div>
+          <UrlInput />
+          <p className="text-xs text-stone-600 font-mono">
+            12,400 repos analyzed · avg 28s
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* Right — terminal preview */}
+        <div className="flex-1 hidden lg:block shrink-0 max-w-sm xl:max-w-md">
+          <div
+            className="bg-[#080706] border border-stone-900 shadow-2xl motion-safe:-rotate-1"
+            aria-hidden="true"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {/* Terminal chrome */}
+            <div className="flex items-center gap-1.5 px-4 py-3 border-b border-stone-900">
+              <div className="w-3 h-3 rounded-full bg-stone-800" />
+              <div className="w-3 h-3 rounded-full bg-stone-800" />
+              <div className="w-3 h-3 rounded-full bg-stone-800" />
+              <span className="ml-2 text-xs text-stone-600 font-mono">repoready</span>
+            </div>
+            {/* Terminal output */}
+            <div className="p-5 font-mono text-sm space-y-1.5">
+              <p className="text-stone-600">$ repoready analyze github.com/you/repo</p>
+              <p className="text-stone-400">✓ Repo fetched — 47 files</p>
+              <p className="text-stone-400">✓ Stack: Next.js, TypeScript, Clerk</p>
+              <p className="text-amber-500">→ Generating README.md...</p>
+              <p className="text-amber-500">→ Generating .env.example...</p>
+              <p className="text-amber-500">→ Generating docker-compose.yml...</p>
+              <p className="text-amber-500">→ Generating ci.yml...</p>
+              <p className="text-stone-300 mt-3 border-t border-stone-900 pt-3">
+                Ready to download ↓
+              </p>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
-  );
+      </section>
+
+      {/* Features */}
+      <section className="px-6 max-w-6xl mx-auto w-full pb-16 lg:pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            {
+              n: '01',
+              title: 'Real analysis',
+              desc: 'Reads your actual code — not a template filler.',
+            },
+            {
+              n: '02',
+              title: '4 files, 30 seconds',
+              desc: 'README, .env, docker-compose, CI — all at once.',
+            },
+            {
+              n: '03',
+              title: 'Stream & download',
+              desc: 'Watch it generate live, then grab a ZIP.',
+            },
+          ].map(f => (
+            <div
+              key={f.n}
+              className="border border-[#292524] bg-[#1c1917] p-6"
+            >
+              <p className="font-mono text-amber-500 text-xs mb-3 tabular-nums">{f.n}</p>
+              <h3 className="font-semibold text-stone-100 mb-2">{f.title}</h3>
+              <p className="text-stone-500 text-sm leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+  )
 }
