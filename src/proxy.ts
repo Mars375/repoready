@@ -1,11 +1,7 @@
 // src/proxy.ts — Next.js 16 uses proxy.ts (not middleware.ts)
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { clerkMiddleware } from '@clerk/nextjs/server'
 
-const isProtected = createRouteMatcher(['/dashboard(.*)'])
-
-export default clerkMiddleware(async (auth, req) => {
-  if (isProtected(req)) await auth.protect()
-})
+export default clerkMiddleware()
 
 export const config = {
   matcher: [
