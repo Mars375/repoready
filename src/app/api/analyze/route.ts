@@ -65,7 +65,7 @@ Generate these 4 files in order, each preceded by its marker:
 ---FILE:.env.example---
 ---FILE:docker-compose.yml---
 ---FILE:.github/workflows/ci.yml---`,
-    maxTokens: 4000,
+    maxOutputTokens: 4000,
     onFinish: async ({ text }) => {
       const files = parseGeneratedFiles(text)
       const score = calculateScore(files)
