@@ -85,8 +85,10 @@ export async function fetchRepoFiles(url: string): Promise<RepoData> {
     }
   }
 
+  // Extract raw package.json content (strip the --- FILE: ... --- prefix)
   const packageJsonEntry = collected.find((c) => c.includes('package.json')) ?? ''
-  const detectedStack = detectStack(packageJsonEntry)
+  const rawPackageJson = packageJsonEntry.replace(/^[\s\S]*?---\n/, '')
+  const detectedStack = detectStack(rawPackageJson)
 
   return {
     repoName: repo,
