@@ -1,3 +1,5 @@
+const DAILY_LIMIT = 3
+
 interface RateLimitData { count: number; date: string }
 
 export function checkRateLimit(cookieValue: string | undefined): boolean {
@@ -5,7 +7,7 @@ export function checkRateLimit(cookieValue: string | undefined): boolean {
   try {
     const data: RateLimitData = JSON.parse(cookieValue)
     if (data.date !== new Date().toDateString()) return true  // new day, reset
-    return data.count < 3
+    return data.count < DAILY_LIMIT
   } catch {
     return true
   }

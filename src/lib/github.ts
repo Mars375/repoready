@@ -20,14 +20,29 @@ function detectStack(packageJson: string): string[] {
     const pkg = JSON.parse(packageJson)
     const deps = { ...pkg.dependencies, ...pkg.devDependencies }
     const stack: string[] = []
+    // Frameworks
     if (deps['next']) stack.push('Next.js')
     if (deps['react']) stack.push('React')
+    if (deps['vue']) stack.push('Vue')
+    if (deps['svelte'] || deps['@sveltejs/kit']) stack.push('Svelte')
+    if (deps['express']) stack.push('Express')
+    if (deps['fastify']) stack.push('Fastify')
+    if (deps['hono']) stack.push('Hono')
+    // Language
     if (deps['typescript'] || deps['@types/node']) stack.push('TypeScript')
+    // Styling
     if (deps['tailwindcss']) stack.push('Tailwind CSS')
+    // ORM / DB
     if (deps['drizzle-orm']) stack.push('Drizzle')
+    if (deps['prisma'] || deps['@prisma/client']) stack.push('Prisma')
     if (deps['@neondatabase/serverless']) stack.push('Neon')
-    if (deps['@clerk/nextjs']) stack.push('Clerk')
+    if (deps['@supabase/supabase-js']) stack.push('Supabase')
+    // Auth / Payments / API
+    if (deps['@clerk/nextjs'] || deps['@clerk/clerk-sdk-node']) stack.push('Clerk')
+    if (deps['next-auth']) stack.push('NextAuth')
     if (deps['stripe']) stack.push('Stripe')
+    if (deps['@trpc/server']) stack.push('tRPC')
+    // Infrastructure
     if (deps['docker-compose']) stack.push('Docker')
     return stack
   } catch {

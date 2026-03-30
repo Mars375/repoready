@@ -1,9 +1,4 @@
-interface GeneratedFiles {
-  readme: string
-  envExample: string
-  dockerCompose: string
-  ci: string
-}
+import type { GeneratedFiles } from './parse-files'
 
 export function calculateScore(files: GeneratedFiles): number {
   let score = 0
