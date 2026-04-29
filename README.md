@@ -1,97 +1,83 @@
 # RepoReady
 
-> Paste a GitHub URL — get a production-ready README, `.env.example`, `docker-compose.yml`, and CI workflow in seconds.
+Generate repo-specific setup docs and starter ops files from a public GitHub URL.
 
-RepoReady analyzes your repository's actual code, detects the stack, and uses Claude to generate documentation that reflects what's really in the repo — not a generic template.
+RepoReady analyzes a repository, streams generation output live, and produces four files: `README.md`, `.env.example`, `docker-compose.yml`, and `.github/workflows/ci.yml`. The current repo includes the landing page, analysis flow, download UI, history storage, score calculation, and tests for key parsing and scoring logic.
 
 ## Features
 
-- **AI doc generation** — README, `.env.example`, `docker-compose.yml`, `.github/workflows/ci.yml`
-- **Stack detection** — automatically identifies frameworks, databases, auth providers
-- **Live terminal stream** — watch the output generate in real time
-- **Analysis history** — authenticated users get a full history of past analyses
-- **Readiness score** — rates how production-ready the generated docs are
-- **One-click download** — export all 4 files as a ZIP
-- **Rate limiting** — anonymous users get a usage cap; sign in for unlimited access
-- **Auth** — Clerk (email, OAuth)
+- GitHub URL analysis for public repositories
+- Generated output for 4 files:
+  - `README.md`
+  - `.env.example`
+  - `docker-compose.yml`
+  - `.github/workflows/ci.yml`
+- Live streaming analysis UI during generation
+- ZIP download for generated files
+- Analysis history for signed-in users
+- Readiness scoring for generated output
+- Anonymous rate limiting with higher access for authenticated users
+- GitHub file fetching and stack detection
+- Tests for parsing, scoring, GitHub helpers, rate limiting, and the analyze route
 
-## Stack
+## Tech Stack
 
-| Layer | Tech |
-|---|---|
-| Framework | Next.js 16 (App Router, Turbopack) |
-| AI | Vercel AI SDK v6 + AI Gateway (`anthropic/claude-sonnet-4.6`) |
-| GitHub | Octokit REST |
-| Auth | Clerk |
-| Database | Neon Postgres + Drizzle ORM |
-| UI | shadcn/ui, Tailwind CSS v4, Base UI |
-| Syntax highlighting | Shiki |
-| Archive | JSZip |
-| Tests | Vitest |
+- **Framework:** Next.js 16, React 19, TypeScript
+- **AI:** Vercel AI SDK
+- **GitHub integration:** Octokit REST
+- **Auth:** Clerk
+- **Database:** Neon Postgres + Drizzle ORM
+- **UI:** Tailwind CSS v4, Base UI, shadcn/ui
+- **Syntax highlighting:** Shiki
+- **Archive generation:** JSZip
+- **Testing:** Vitest
 
-## Getting Started
+## Local Setup
 
 ```bash
-git clone https://github.com/your-username/repoready.git
+git clone https://github.com/Mars375/repoready.git
 cd repoready
 npm install
-cp .env.example .env.local
 ```
 
-Fill in `.env.local`:
+**Note:** the current repo does not include a committed `.env.example`, so create `.env.local` manually.
+
+At minimum, the codebase directly references:
 
 ```env
-# Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-
-# Neon
 DATABASE_URL=
-
-# AI Gateway (via Vercel)
-# Run: vercel link && vercel env pull
-# VERCEL_OIDC_TOKEN is auto-provisioned — no Anthropic key needed
+GITHUB_TOKEN=
 ```
 
-Push the schema and start dev:
+The current codebase and docs also indicate Clerk-based authentication and AI-backed generation, so local setup should include the Clerk values used by the app and any AI/runtime configuration required by your environment.
+
+Then start the app:
 
 ```bash
-npx drizzle-kit push
 npm run dev
 ```
 
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── analyze/             # Repo URL input + live terminal stream
-│   ├── dashboard/           # Analysis history (authenticated)
-│   └── api/
-│       ├── analyze/         # POST — fetch repo, stream AI generation, save result
-│       └── history/         # GET — user's past analyses
-├── components/
-│   ├── terminal-stream.tsx  # Live streaming output display
-│   ├── analysis-summary.tsx # Readiness score + file tabs
-│   ├── download-button.tsx  # ZIP export
-│   ├── url-input.tsx        # Repo URL form
-│   └── history-list.tsx     # Past analyses
-└── lib/
-    ├── github.ts            # Fetch repo files via Octokit
-    ├── parse-files.ts       # Parse AI output into individual files
-    ├── score.ts             # Readiness score calculation
-    ├── rate-limit.ts        # Cookie-based rate limiting for anonymous users
-    └── db/
-        ├── schema.ts        # Drizzle schema (analyses table)
-        └── index.ts         # Neon connection
-```
-
-## Tests
+If you want database-backed history, push the schema first:
 
 ```bash
-npm run test
+npx drizzle-kit push
 ```
 
-Tests cover the core logic: GitHub fetching, file parsing, score calculation, and rate limiting.
+## Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
+
+## Notes on Testing
+
+Vitest test files are present in the repository, but the current `package.json` does not expose a `test` script. If you want to run the existing tests, invoke Vitest directly in your own workflow.
+
+## Project Status
+
+**Current status: early but functional MVP.**
+
+The core product flow exists: URL input, repo fetching, streamed generation, scoring, downloads, and saved history. Two gaps are visible in the current repo state: there is no committed `.env.example`, and `package.json` does not yet define a `test` script even though tests exist in `src/`.
